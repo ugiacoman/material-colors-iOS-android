@@ -23,6 +23,7 @@ Ex: {mainColor: {'shade': 'hex'}, ... }
 def parsePage(page):
 	colorDict = {}
 	uiColorsArray = []
+	xmlArray = []
 
 	mainColor = ""
 	shadesArray = []
@@ -59,30 +60,41 @@ def parsePage(page):
 			r = round(float(int(hex[1:3], 16)) / 255, 2)
 			g = round(float(int(hex[3:5], 16)) / 255, 2)
 			b = round(float(int(hex[5:7], 16)) / 255, 2)
-			uicolor = "{} = UIColor(red:{}, green:{}, blue:{}, alpha:1.0) // {}\n".format(shadeName, r, g, b, hex)
+			uicolor = '{} = UIColor(red:{}, green:{}, blue:{}, alpha:1.0) // {}\n'.format(shadeName, r, g, b, hex)
+			xml = '{}">{} </color>\n'.format(shadeName, hex)
 			uiColorsArray.append(uicolor)
+			xmlArray.append(xml)
 
 	uiColorsArray = sorted(uiColorsArray)
+	xmlArray = sorted(xmlArray)
 
-	for i, item in enumerate(uiColorsArray):
-		uiColorsArray[i] = "    var " + item
+	for i, (uicolor, xml) in enumerate(zip(uiColorsArray, xmlArray)):
+		uiColorsArray[i] = "    var " + uicolor
+		xmlArray[i] = '  color name="' + xml
 
-	return uiColorsArray
+	return [uiColorsArray,xmlArray]
 
 '''
 createFile
 ---------
-Creates colors.swift, saves to directory where script is located
+Creates MaterialColors.swift and colors.xml, saves to directory where script is located
 '''
 
 def createFile(colorsArray):
 
-
+	# Create swift file
 	file = open("MaterialColors.swift", "w")
 	file.write("struct MaterialColors {\n")
-	for item in colorsArray:
+	for item in colorsArray[0]:
 		file.write(item)
 	file.write("}")
+
+	# Create xml file
+	file = open("colors.xml", "w")
+	file.write('<?xml version="1.0" encoding="utf-8"?>\n<resources>\n')
+	for item in colorsArray[1]:
+		file.write(item)
+	file.write("</resources>")
 
 
 def main():
