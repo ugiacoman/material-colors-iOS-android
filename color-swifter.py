@@ -70,7 +70,7 @@ def parsePage(page):
 
 	for i, (uicolor, xml) in enumerate(zip(uiColorsArray, xmlArray)):
 		uiColorsArray[i] = "    var " + uicolor
-		xmlArray[i] = '  color name="' + xml
+		xmlArray[i] = '  <color name="' + xml
 
 	return [uiColorsArray,xmlArray]
 
