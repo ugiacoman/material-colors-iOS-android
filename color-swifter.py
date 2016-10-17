@@ -60,8 +60,8 @@ def parsePage(page):
 			r = round(float(int(hex[1:3], 16)) / 255, 2)
 			g = round(float(int(hex[3:5], 16)) / 255, 2)
 			b = round(float(int(hex[5:7], 16)) / 255, 2)
-			uicolor = '{}() -> UIColor {{return UIColor(red:{}, green:{}, blue:{}, alpha:1.0) }} // {}'\
-					  '\n\n'.format(shadeName, r, g, b, hex)
+			uicolor = '{}() -> UIColor {{return UIColor(red:{}, green:{}, blue:{}, alpha:1.0)}} // {}'\
+					  '\n'.format(shadeName, r, g, b, hex)
 			xml = '{}">{} </color>\n'.format(shadeName, hex)
 			uiColorsArray.append(uicolor)
 			xmlArray.append(xml)
