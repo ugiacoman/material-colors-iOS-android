@@ -60,7 +60,7 @@ def parsePage(page):
 			r = round(float(int(hex[1:3], 16)) / 255, 2)
 			g = round(float(int(hex[3:5], 16)) / 255, 2)
 			b = round(float(int(hex[5:7], 16)) / 255, 2)
-			uicolor = '{}() -> UIColor {{return UIColor(red:{}, green:{}, blue:{}, alpha:1.0)}} // {}'\
+			uicolor = '{}: UIColor {{return UIColor(red:{}, green:{}, blue:{}, alpha:1.0)}} // {}'\
 					  '\n'.format(shadeName, r, g, b, hex)
 			xml = '{}">{} </color>\n'.format(shadeName, hex)
 			uiColorsArray.append(uicolor)
@@ -70,7 +70,7 @@ def parsePage(page):
 	xmlArray = sorted(xmlArray)
 
 	for i, (uicolor, xml) in enumerate(zip(uiColorsArray, xmlArray)):
-		uiColorsArray[i] = "    class func " + uicolor
+		uiColorsArray[i] = "    public class var " + uicolor
 		xmlArray[i] = '  <color name="' + xml
 
 	return [uiColorsArray,xmlArray]
