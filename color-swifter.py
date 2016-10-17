@@ -60,7 +60,8 @@ def parsePage(page):
 			r = round(float(int(hex[1:3], 16)) / 255, 2)
 			g = round(float(int(hex[3:5], 16)) / 255, 2)
 			b = round(float(int(hex[5:7], 16)) / 255, 2)
-			uicolor = '{} = UIColor(red:{}, green:{}, blue:{}, alpha:1.0) // {}\n'.format(shadeName, r, g, b, hex)
+			uicolor = '{}() -> UIColor {{\n        return UIColor(red:{}, green:{}, blue:{}, alpha:1.0) // {}\n    '\
+					  '}}\n\n'.format(shadeName, r, g, b, hex)
 			xml = '{}">{} </color>\n'.format(shadeName, hex)
 			uiColorsArray.append(uicolor)
 			xmlArray.append(xml)
@@ -69,7 +70,7 @@ def parsePage(page):
 	xmlArray = sorted(xmlArray)
 
 	for i, (uicolor, xml) in enumerate(zip(uiColorsArray, xmlArray)):
-		uiColorsArray[i] = "    var " + uicolor
+		uiColorsArray[i] = "    class func " + uicolor
 		xmlArray[i] = '  <color name="' + xml
 
 	return [uiColorsArray,xmlArray]
@@ -84,7 +85,7 @@ def createFile(colorsArray):
 
 	# Create swift file
 	file = open("MaterialColors.swift", "w")
-	file.write("struct MaterialColors {\n")
+	file.write("import UIKit\n\nextension UIColor {\n")
 	for item in colorsArray[0]:
 		file.write(item)
 	file.write("}")
